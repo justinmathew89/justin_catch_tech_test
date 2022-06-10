@@ -16,15 +16,19 @@ class CsvConvert implements IFileConvert
         'customer_state'
     ];
 
+    /**
+     * @inheritDoc
+     */
     public function convertOrdersToFile($orders = []) :string
     {
         if (!empty($orders)) {
             $outPutFile = $this->destinationFolder.$this->outputFileName;
             $fp = fopen($outPutFile, "w");
             fputcsv($fp, $this->headerRowColumns);
-            foreach($orders as $orderString) {
-                $order = json_decode($orderString);
-                $orderLine = [];
+            foreach($orders as $orderDetail) {
+                if (is_string($orderDetail)) {
+                    $order = json_decode($orderDetail);
+                }
                 $uniqueItemCount = !empty($order->items) ? sizeof($order->items) : 0;
                 $totalItemsCount = 0;
                 $totalOrderValue = 0;
@@ -67,6 +71,9 @@ class CsvConvert implements IFileConvert
         return $outPutFile;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validateConvertedFile() :bool
     {
         return true;

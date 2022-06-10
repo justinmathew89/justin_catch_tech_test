@@ -2,12 +2,17 @@
 
 namespace App\Services\OrderImport;
 
+use App\Services\OrderImport\Exceptions\OrderFileMissingException;
 use Rs\JsonLines\JsonLines;
 
 class JsonlImport implements IFileImport
 {
-    public $orderFileUrl = '';
+    use Trait\FileImportTrait;
+    public $orderFileUrl = null;
 
+    /**
+     * @inheritDoc
+     */
     public function getOrdersFromFile() :iterable
     {
         $orders = null;
@@ -21,14 +26,4 @@ class JsonlImport implements IFileImport
          return $orders;
     }
 
-    public function getOrderFileUrl(): string
-    {
-        return $this->orderFileUrl;
-    }
-
-    public function setOrderFileUrl(string $orderFileUrl): IFileImport
-    {
-        $this->orderFileUrl = $orderFileUrl;
-        return $this;
-    }
 }
